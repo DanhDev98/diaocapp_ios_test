@@ -1,0 +1,31 @@
+workflows:
+  react-native-build:
+    name: React Native Build
+    max_build_duration: 60
+    environment:
+      vars:
+        FLAVOR: "production"
+      node: "20"
+      cocoapods: default
+      ruby: default
+      xcode: latest
+      cache: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+          cd ios && pod install && cd ..
+      - name: Build Android
+        script: |
+          cd android
+          ./gradlew assembleRelease
+          cd ..
+      - name: Build iOS
+        script: |
+          cd ios
+          xcodebuild -workspace AppBDS.xcworkspace -scheme AppBDS -configuration Release -sdk iphoneos -derivedDataPath build
+          cd ..
+    artifacts:
+      - android/app/build/outputs/**/*.apk
+      - ios/build/**/*.app
+      - ios/build/**/*.ipa
