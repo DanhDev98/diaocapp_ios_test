@@ -9,7 +9,6 @@ workflows:
       cocoapods: default
       ruby: default
       xcode: latest
-      cache: true
     scripts:
       - name: Install dependencies
         script: |
